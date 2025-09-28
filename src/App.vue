@@ -1,0 +1,56 @@
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+
+const haveMoney = ref(0)
+const TorF = ref(false)
+const trueCount = ref(0)
+const falseCount = ref(1)
+const incremental = ref(1)
+const interval = ref(1000)
+const probability = ref(0.01)
+let timer = null
+
+onMounted(() => {
+  timer = setInterval(() => {
+    if (Math.random() < probability) {
+      haveMoney.value += incremental
+      TorF.value = true
+      trueCount.value ++
+      if (probability <= 1) {
+        probability.value += 0.01
+      }
+      falseCount.value = 0
+    }
+    else {
+      TorF.value = false
+      falseCount.value ++
+      trueCount.value = 0
+    }
+  }, interval.value)
+})
+
+onUnmounted(() => {
+    if (timer) {
+        clearInterval(timer)
+    }
+})
+</script>
+
+<template>
+<div class="flex font-sans text-center w-screen h-screen overflow-hidden">
+    <div class="grow">
+        <div class="pt-5 pb-5 border-b">
+            <div class="text-4xl">所持金 ￥{{ haveMoney }}</div>
+            <div>試行時間{{ interval/1000 }}秒</div>
+            <div>成功率{{ probability*100 }}%</div>
+        </div>
+        <div class="flex flex-col justify-center text-2xl h-full">
+            <div v-if="TorF" class="text-green-500">True({{ trueCount }})</div>
+            <div v-else class="text-red-500">False({{ falseCount }})</div>
+        </div>
+    </div>
+    <div class="grow border-l h-full">
+        <div>スキルツリー</div>
+    </div>
+</div>
+</template>
