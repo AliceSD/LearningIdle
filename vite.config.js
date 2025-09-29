@@ -8,5 +8,5 @@ export default defineConfig({
     vue(),
     tailwindcss(),
   ],
-  base: "/LearningIdle/"
+  base: '/LearningIdle/'
 })
