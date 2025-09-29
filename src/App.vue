@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import dayjs from 'dayjs';
 
 const haveMoney = ref(0)
 const TorF = ref(false)
@@ -8,6 +9,7 @@ const falseCount = ref(1)
 const incremental = ref(1)
 const interval = ref(1000)
 const probability = ref(0.01)
+const lastSaved = ref("なし")
 let timer = null
 let saveTimer = null
 
@@ -24,6 +26,7 @@ onMounted(() => {
       probability: probability.value,
     }
     localStorage.setItem('LI', JSON.stringify(saveItems))
+    lastSaved.value = dayjs().format("YYYY/MM/DD HH:mm:ss")
   }, 60*1000)
   timer = setInterval(() => {
     if (Math.random() < probability) {
@@ -55,15 +58,18 @@ onUnmounted(() => {
 
 <template>
 <div class="flex font-sans text-center w-screen h-screen overflow-hidden">
-  <div class="grow">
+  <div class="grow flex flex-col">
     <div class="pt-5 pb-5 border-b">
       <div class="text-4xl">所持金 ￥{{ haveMoney }}</div>
       <div>試行時間{{ interval/1000 }}秒</div>
       <div>成功率{{ probability*100 }}%</div>
     </div>
-    <div class="flex flex-col justify-center text-2xl h-full">
+    <div class="grow flex flex-col justify-center text-2xl">
       <div v-if="TorF" class="text-green-500">True({{ trueCount }})</div>
       <div v-else class="text-red-500">False({{ falseCount }})</div>
+    </div>
+    <div>
+      <div class="border-t">最終保存 {{ lastSaved }}</div>
     </div>
   </div>
   <div class="grow border-l h-full">
