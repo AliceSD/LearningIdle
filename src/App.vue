@@ -10,8 +10,14 @@ const incremental = ref(1)
 const interval = ref(1000)
 const probability = ref(0.01)
 const lastSaved = ref("なし")
+const debug = ref(false)
+let random = null
 let timer = null
 let saveTimer = null
+
+function debugToggle() {
+  debug.value = !debug.value
+}
 
 onMounted(() => {
   const loadItemsString = localStorage.getItem('LI')
@@ -29,12 +35,12 @@ onMounted(() => {
     lastSaved.value = dayjs().format("YYYY/MM/DD HH:mm:ss")
   }, 60*1000)
   timer = setInterval(() => {
-    console.log(Math.random())
-    if (Math.random() < probability) {
+    random = Math.random()
+    if (random < probability.value) {
       haveMoney.value += incremental
       TorF.value = true
       trueCount.value ++
-      if (probability <= 1) {
+      if (probability.value <= 1) {
         probability.value += 0.01
       }
       falseCount.value = 0
@@ -59,21 +65,25 @@ onUnmounted(() => {
 
 <template>
 <div class="flex text-center text-white w-screen h-screen overflow-hidden bg-stone-950">
-  <div class="grow flex flex-col">
+  <div class="grow flex flex-col w-1/2">
     <div class="pt-5 pb-5 border-b border-white text-sky-300">
       <div class="text-4xl">所持金 ￥{{ haveMoney }}</div>
       <div>試行時間{{ interval/1000 }}秒</div>
       <div>成功率{{ probability*100 }}%</div>
     </div>
     <div class="grow flex flex-col justify-center text-2xl">
+      <div v-if="debug">{{ random }}</div>
       <div v-if="TorF" class="text-green-500">True({{ trueCount }})</div>
       <div v-else class="text-red-500">False({{ falseCount }})</div>
+    </div>
+    <div class="flex flex-col justify-start">
+      <button @click="debugToggle" class="border border-white w-15 m-1">debug</button>
     </div>
     <div>
       <div class="border-t">最終保存 {{ lastSaved }}</div>
     </div>
   </div>
-  <div class="grow flex flex-col justify-center border-l h-full">
+  <div class="grow flex flex-col justify-center border-l w-1/2 h-full">
     <div>スキルツリー予定地</div>
   </div>
 </div>
