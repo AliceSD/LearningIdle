@@ -57,9 +57,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-<div class="flex font-sans text-center w-screen h-screen overflow-hidden">
+<div class="flex text-center text-white w-screen h-screen overflow-hidden bg-stone-950">
   <div class="grow flex flex-col">
-    <div class="pt-5 pb-5 border-b">
+    <div class="pt-5 pb-5 border-b border-white text-sky-300">
       <div class="text-4xl">所持金 ￥{{ haveMoney }}</div>
       <div>試行時間{{ interval/1000 }}秒</div>
       <div>成功率{{ probability*100 }}%</div>
@@ -72,8 +72,8 @@ onUnmounted(() => {
       <div class="border-t">最終保存 {{ lastSaved }}</div>
     </div>
   </div>
-  <div class="grow border-l h-full">
-    <div>スキルツリー</div>
+  <div class="grow flex flex-col justify-center border-l h-full">
+    <div>スキルツリー予定地</div>
   </div>
 </div>
 </template>
