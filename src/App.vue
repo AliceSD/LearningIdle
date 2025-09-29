@@ -29,7 +29,8 @@ onMounted(() => {
     lastSaved.value = dayjs().format("YYYY/MM/DD HH:mm:ss")
   }, 60*1000)
   timer = setInterval(() => {
-    if (Math.random() <= probability) {
+    console.log(Math.random())
+    if (Math.random() < probability) {
       haveMoney.value += incremental
       TorF.value = true
       trueCount.value ++
