@@ -8,7 +8,7 @@ const trueCount = ref(0)
 const falseCount = ref(1)
 const incremental = ref(1)
 const interval = ref(1000)
-const probability = ref(0.01)
+const probability = ref(1)
 const lastSaved = ref("なし")
 const debug = ref(false)
 let random = null
@@ -30,7 +30,7 @@ function save() {
 
 function reset() {
   haveMoney.value = 0
-  probability.value = 0.01
+  probability.value = 1
 }
 
 onMounted(() => {
@@ -45,12 +45,12 @@ onMounted(() => {
   }, 60*1000)
   timer = setInterval(() => {
     random = Math.random()
-    if (random < probability.value) {
+    if (random < probability.value/100) {
       haveMoney.value += incremental.value
       TorF.value = true
       trueCount.value ++
-      if (probability.value <= 1) {
-        probability.value += 0.01
+      if (probability.value <= 100) {
+        probability.value += 1
       }
       falseCount.value = 0
     }
@@ -78,7 +78,7 @@ onUnmounted(() => {
     <div class="pt-5 pb-5 border-b border-white text-sky-300">
       <div class="text-4xl">所持金 ￥{{ haveMoney }}</div>
       <div>試行時間{{ interval/1000 }}秒</div>
-      <div>成功率{{ probability.toFixed(2)*100 }}%</div>
+      <div>成功率{{ probability }}%</div>
     </div>
     <div class="grow flex flex-col justify-center text-2xl">
       <div v-if="debug">{{ random }}</div>
