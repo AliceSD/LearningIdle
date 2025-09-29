@@ -37,7 +37,7 @@ onMounted(() => {
   timer = setInterval(() => {
     random = Math.random()
     if (random < probability.value) {
-      haveMoney.value += incremental
+      haveMoney.value += incremental.value
       TorF.value = true
       trueCount.value ++
       if (probability.value <= 1) {
