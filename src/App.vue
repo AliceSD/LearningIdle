@@ -9,6 +9,7 @@ const incremental = ref(1)
 const interval = ref(1000)
 const probability = ref(0.01)
 let timer = null
+let saveTimer = null
 
 onMounted(() => {
   const loadItemsString = localStorage.getItem('LI')
@@ -17,6 +18,13 @@ onMounted(() => {
     haveMoney.value = loadItems.haveMoney
     probability.value = loadItems.probability
   }
+  saveTimer = setInterval(() => {
+    let saveItems = {
+      haveMoney: haveMoney.value,
+      probability: probability.value,
+    }
+    localStorage.setItem('LI', JSON.stringify(saveItems))
+  }, 60*1000)
   timer = setInterval(() => {
     if (Math.random() < probability) {
       haveMoney.value += incremental
@@ -38,11 +46,9 @@ onMounted(() => {
 onUnmounted(() => {
   if (timer) {
     clearInterval(timer)
-    let saveItems = {
-      haveMoney: haveMoney.value,
-      probability: probability.value,
-    }
-    localStorage.setItem('LI', JSON.stringify(saveItems))
+  }
+  if (saveTimer) {
+    clearInterval(saveTimer)
   }
 })
 </script>
