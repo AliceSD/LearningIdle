@@ -19,6 +19,20 @@ function debugToggle() {
   debug.value = !debug.value
 }
 
+function save() {
+  let saveItems = {
+    haveMoney: haveMoney.value,
+    probability: probability.value,
+  }
+  localStorage.setItem('LI', JSON.stringify(saveItems))
+  lastSaved.value = dayjs().format("YYYY/MM/DD HH:mm:ss")
+}
+
+function reset() {
+  haveMoney.value = 0
+  probability.value = 0.01
+}
+
 onMounted(() => {
   const loadItemsString = localStorage.getItem('LI')
   if (loadItemsString !== null) {
@@ -27,12 +41,7 @@ onMounted(() => {
     probability.value = loadItems.probability
   }
   saveTimer = setInterval(() => {
-    let saveItems = {
-      haveMoney: haveMoney.value,
-      probability: probability.value,
-    }
-    localStorage.setItem('LI', JSON.stringify(saveItems))
-    lastSaved.value = dayjs().format("YYYY/MM/DD HH:mm:ss")
+    save()
   }, 60*1000)
   timer = setInterval(() => {
     random = Math.random()
@@ -69,15 +78,19 @@ onUnmounted(() => {
     <div class="pt-5 pb-5 border-b border-white text-sky-300">
       <div class="text-4xl">所持金 ￥{{ haveMoney }}</div>
       <div>試行時間{{ interval/1000 }}秒</div>
-      <div>成功率{{ probability*100 }}%</div>
+      <div>成功率{{ probability.toFixed(2)*100 }}%</div>
     </div>
     <div class="grow flex flex-col justify-center text-2xl">
       <div v-if="debug">{{ random }}</div>
       <div v-if="TorF" class="text-green-500">True({{ trueCount }})</div>
       <div v-else class="text-red-500">False({{ falseCount }})</div>
     </div>
-    <div class="flex flex-col justify-start">
-      <button @click="debugToggle" class="border border-white w-15 m-1">debug</button>
+    <div class="flex justify-between m-1">
+      <div class="flex flex-row">
+        <button @click="save" class="border border-white text-lime-300 w-15">SAVE</button>
+        <button @click="reset" class="border border-white text-red-600 w-15 mx-1">RESET</button>
+      </div>
+      <button @click="debugToggle" class="border border-white w-15">DEBUG</button>
     </div>
     <div>
       <div class="border-t">最終保存 {{ lastSaved }}</div>
