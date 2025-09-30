@@ -49,7 +49,7 @@ onMounted(() => {
       haveMoney.value += incremental.value
       TorF.value = true
       trueCount.value ++
-      if (probability.value <= 100) {
+      if (probability.value < 100) {
         probability.value += 1
       }
       falseCount.value = 0
